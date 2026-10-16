@@ -472,6 +472,7 @@
                 <select data-key="voiceURI" id="voiceSelect">
                     <option value="">Tự động (tiếng Việt)</option>
                 </select>
+                <small class="hint" id="voiceInfo"></small>
             </label>
 
             <label class="field">
@@ -529,9 +530,10 @@
             <ul>
                 <li>Bấm <b>Bật loa</b> một lần để trình duyệt cho phép phát âm thanh, sau đó loa tự kêu ngẫu nhiên.</li>
                 <li>Để trang mở trên màn hình. Khi khóa máy hoặc chuyển sang app khác, trình duyệt có thể tạm dừng loa.</li>
-                <li><b>iPhone:</b> tắt chế độ im lặng (gạt bên hông). Tải giọng Việt tại Cài đặt › Trợ năng › Nội dung được đọc › Giọng nói › Tiếng Việt.</li>
-                <li><b>Android:</b> cài/cập nhật “Dịch vụ lời nói của Google” và tải dữ liệu giọng Tiếng Việt.</li>
-                <li><b>Máy tính:</b> Microsoft Edge có sẵn giọng tiếng Việt tự nhiên (HoaiMy, NamMinh).</li>
+                <li>Giọng có dấu <b>★</b> trong danh sách là giọng tự nhiên, nghe hay hơn. App tự chọn giọng tốt nhất trên máy.</li>
+                <li><b>iPhone:</b> tắt chế độ im lặng (gạt bên hông). Giọng hay hơn: Cài đặt › Trợ năng › Nội dung được đọc › Giọng nói › Tiếng Việt › tải bản <b>Nâng cao</b> của giọng Linh.</li>
+                <li><b>Android:</b> Cài đặt › tìm “Chuyển văn bản thành giọng nói” › chọn công cụ của Google › cài dữ liệu Tiếng Việt và chọn giọng (có nhiều giọng nam/nữ để nghe thử).</li>
+                <li><b>Máy tính:</b> mở bằng <b>Microsoft Edge</b> để có giọng AI rất tự nhiên: HoaiMy (nữ), NamMinh (nam). Cần có mạng.</li>
                 <li>Thêm trang ra màn hình chính (Chia sẻ › Thêm vào MH chính) để mở như một app.</li>
             </ul>
         </details>
@@ -719,13 +721,31 @@
 
             const isVi = (v) => /^vi/i.test(v.lang);
 
+            // Chấm điểm chất lượng giọng: giọng AI (Natural/Neural), bản Nâng cao/Premium của Apple,
+            // giọng online của Google/Microsoft được ưu tiên hơn giọng nén (compact) có sẵn.
+            function voiceScore(v) {
+                const n = `${v.name} ${v.voiceURI}`.toLowerCase();
+                let s = 0;
+                if (/natural|neural|premium/.test(n)) s += 6;
+                if (/enhanced|nâng cao/.test(n)) s += 4;
+                if (/online|network/.test(n)) s += 2;
+                if (/hoaimy|namminh/.test(n)) s += 2;
+                if (/google/.test(n)) s += 1;
+                if (/compact/.test(n)) s -= 2;
+                return s;
+            }
+
+            const isGoodVoice = (v) => voiceScore(v) >= 4;
+
+            // iPhone đặt cùng tên cho bản thường và bản Nâng cao, nên ghi rõ cấp chất lượng.
+            function voiceName(v) {
+                const uri = v.voiceURI.toLowerCase();
+                const tier = uri.includes('premium') ? ' · Cao cấp' : uri.includes('enhanced') ? ' · Nâng cao' : '';
+                return v.name + tier;
+            }
+
             function autoVoice() {
-                const score = (v) => {
-                    const n = v.name.toLowerCase();
-                    return (n.includes('natural') ? 4 : 0) + (n.includes('online') ? 2 : 0) +
-                        (n.includes('hoaimy') ? 2 : 0) + (n.includes('google') ? 1 : 0);
-                };
-                return voices.filter(isVi).sort((a, b) => score(b) - score(a))[0] || null;
+                return voices.filter(isVi).sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
             }
 
             function pickVoice() {
@@ -742,14 +762,31 @@
                     if (!list.length) return;
                     const g = document.createElement('optgroup');
                     g.label = label;
-                    list.forEach((v) => g.appendChild(new Option(`${v.name} (${v.lang})`, v.voiceURI)));
+                    list.forEach((v) => g.appendChild(new Option(`${isGoodVoice(v) ? '★ ' : ''}${voiceName(v)} (${v.lang})`, v.voiceURI)));
                     sel.appendChild(g);
                 };
-                addGroup('Tiếng Việt', voices.filter(isVi));
+                addGroup('Tiếng Việt', voices.filter(isVi).sort((a, b) => voiceScore(b) - voiceScore(a)));
                 addGroup('Ngôn ngữ khác', voices.filter((v) => !isVi(v)));
                 sel.value = settings.voiceURI;
                 if (sel.value !== settings.voiceURI) sel.value = '';
                 updateVoiceWarning();
+                renderVoiceInfo();
+            }
+
+            function renderVoiceInfo() {
+                const el = $('voiceInfo');
+                if (!synth) {
+                    el.textContent = '';
+                    return;
+                }
+                const v = pickVoice();
+                if (!v) {
+                    el.textContent = 'Đang dùng: giọng mặc định của máy.';
+                } else if (isGoodVoice(v)) {
+                    el.textContent = `Đang dùng: ${voiceName(v)} ★ (giọng tự nhiên)`;
+                } else {
+                    el.textContent = `Đang dùng: ${voiceName(v)}. Có thể cài giọng hay hơn, xem “Mẹo dùng trên điện thoại”.`;
+                }
             }
 
             function updateVoiceWarning(final) {
@@ -1102,6 +1139,7 @@
                 if (key === 'amountMode') renderModes();
                 if (key === 'template') syncTemplatePreset();
                 if (key === 'template' || key === 'dialect') renderPreview();
+                if (key === 'voiceURI') renderVoiceInfo();
                 if ((key === 'minGap' || key === 'maxGap') && running && !busy) planNext();
                 if (key === 'wakeLock') settings.wakeLock ? requestWake() : releaseWake();
                 renderOutputs();

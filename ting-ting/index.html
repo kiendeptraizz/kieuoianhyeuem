@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#16a34a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Loa Ting Ting</title>
+    <meta name="claude:viewport-fit-sides" content="cover">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔔</text></svg>">
+    <style>
+        /* Bố cục: một cột kiểu app điện thoại, loa tròn ở giữa là trung tâm. */
+        :root {
+            --font: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            --bg: #f3f5f7;
+            --surface: #ffffff;
+            --surface-2: #eef1f4;
+            --text: #0f172a;
+            --muted: #5b6575;
+            --border: #dde2e8;
+            --accent: #16a34a;
+            --accent-strong: #15803d;
+            --accent-soft: #dcfce7;
+            --danger: #dc2626;
+            --warn-bg: #fff7ed;
+            --warn-border: #fed7aa;
+            --warn-text: #9a3412;
+            --shadow: 0 1px 2px rgba(15, 23, 42, .05), 0 8px 24px rgba(15, 23, 42, .06);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0b1220;
+                --surface: #111a2b;
+                --surface-2: #1a2538;
+                --text: #e6ebf2;
+                --muted: #93a0b4;
+                --border: #24324a;
+                --accent: #22c55e;
+                --accent-strong: #16a34a;
+                --accent-soft: rgba(34, 197, 94, .18);
+                --danger: #f87171;
+                --warn-bg: #2a1a0c;
+                --warn-border: #5a3412;
+                --warn-text: #fdba74;
+                --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+                color-scheme: dark;
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0b1220;
+            --surface: #111a2b;
+            --surface-2: #1a2538;
+            --text: #e6ebf2;
+            --muted: #93a0b4;
+            --border: #24324a;
+            --accent: #22c55e;
+            --accent-strong: #16a34a;
+            --accent-soft: rgba(34, 197, 94, .18);
+            --danger: #f87171;
+            --warn-bg: #2a1a0c;
+            --warn-border: #5a3412;
+            --warn-text: #fdba74;
+            --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+            color-scheme: dark;
+        }
+
+        * { box-sizing: border-box; }
+
+        :root {
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            background: var(--bg);
+        }
+
+        html, body { margin: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            line-height: 1.45;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .app {
+            max-width: 520px;
+            margin: 0 auto;
+            padding-block: 16px 32px;
+            padding-left: max(16px, env(safe-area-inset-left, 0px));
+            padding-right: max(16px, env(safe-area-inset-right, 0px));
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* ---------- Header ---------- */
+        .brand { display: flex; align-items: center; gap: 12px; }
+
+        .logo {
+            flex: none;
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            display: grid; place-items: center;
+        }
+
+        h1 { font-size: 1.25rem; margin: 0; }
+        h2 { font-size: 1rem; margin: 0; }
+        h3 { font-size: .8rem; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+        h3:first-child { margin-top: 4px; }
+        .brand p { margin: 0; color: var(--muted); font-size: .85rem; }
+
+        /* ---------- Cards ---------- */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .speaker-card {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 16px; text-align: center;
+        }
+
+        .status {
+            display: flex; align-items: center; gap: 8px;
+            font-size: .875rem; color: var(--muted); min-height: 1.3em;
+        }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+        .running .dot { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); animation: blink 1.6s infinite; }
+
+        @keyframes blink { 50% { opacity: .35; } }
+
+        /* ---------- Speaker button ---------- */
+        .speaker {
+            position: relative;
+            width: 176px; height: 176px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: var(--surface-2);
+            color: var(--muted);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            font: inherit; font-weight: 700; font-size: 1rem;
+            transition: background .25s, color .25s, box-shadow .25s, transform .1s;
+        }
+
+        .speaker:active { transform: scale(.97); }
+        .speaker:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+        .running .speaker {
+            background: radial-gradient(circle at 35% 30%, #4ade80, var(--accent) 55%, var(--accent-strong));
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(22, 163, 74, .35);
+        }
+
+        .speaker::before, .speaker::after {
+            content: "";
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            opacity: 0; pointer-events: none;
+        }
+
+        .ringing .speaker::before { animation: ring 1.2s ease-out infinite; }
+        .ringing .speaker::after { animation: ring 1.2s ease-out .4s infinite; }
+
+        @keyframes ring {
+            from { transform: scale(1); opacity: .7; }
+            to { transform: scale(1.45); opacity: 0; }
+        }
+
+        .last-amount {
+            font-size: 2.4rem; font-weight: 800; line-height: 1.1;
+            color: var(--accent);
+            font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+            word-break: break-word;
+        }
+
+        .last-amount.pop { animation: pop .5s ease; }
+        @keyframes pop { 0% { transform: scale(.8); opacity: .3; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+        .last-time { color: var(--muted); font-size: .85rem; margin-top: 4px; }
+
+        .stats { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+        .stats > div {
+            background: var(--surface-2); border-radius: 12px; padding: 10px 8px;
+            display: flex; flex-direction: column; gap: 2px; min-width: 0;
+        }
+
+        .stats .k { font-size: .75rem; color: var(--muted); }
+        .stats .v { font-weight: 700; font-size: .95rem; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        /* ---------- Buttons ---------- */
+        .btn {
+            appearance: none;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            padding: 11px 16px;
+            border-radius: 12px;
+            font: inherit; font-weight: 600; font-size: .95rem;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+        }
+
+        .btn:hover { border-color: var(--accent); }
+        .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+        .btn.wide { width: 100%; }
+        .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        .link {
+            appearance: none; border: none; background: none; padding: 4px 2px;
+            color: var(--danger); font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer;
+        }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+        .chip {
+            appearance: none;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font: inherit; font-size: .8rem; font-weight: 600;
+            cursor: pointer;
+        }
+
+        .chip:hover { border-color: var(--accent); }
+
+        /* ---------- Warning ---------- */
+        .warn {
+            background: var(--warn-bg);
+            border: 1px solid var(--warn-border);
+            color: var(--warn-text);
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: .875rem;
+        }
+
+        .warn strong { display: block; margin-bottom: 2px; }
+
+        /* ---------- Settings ---------- */
+        details.card > summary {
+            cursor: pointer; list-style: none;
+            display: flex; align-items: center; justify-content: space-between;
+            font-weight: 700;
+        }
+
+        details.card > summary::-webkit-details-marker { display: none; }
+        details.card > summary::after { content: "▾"; color: var(--muted); transition: transform .2s; }
+        details.card[open] > summary::after { transform: rotate(180deg); }
+        details.card[open] > summary { margin-bottom: 8px; }
+
+        .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; min-width: 0; }
+        .field > span, .lbl { font-size: .875rem; font-weight: 600; }
+        .lbl output { float: right; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font: inherit; font-size: 16px; /* 16px: tránh iOS tự phóng to khi gõ */
+        }
+
+        input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+        input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+        .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+        .check { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: .9rem; cursor: pointer; }
+        .check input { width: 20px; height: 20px; margin: 0; accent-color: var(--accent); flex: none; }
+
+        .hint { margin: 0; font-size: .8rem; color: var(--muted); }
+
+        .preview {
+            background: var(--surface-2); border-radius: 10px; padding: 10px 12px;
+            font-size: .875rem; color: var(--muted);
+        }
+
+        .preview b { color: var(--text); font-weight: 600; }
+
+        .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        /* ---------- History ---------- */
+        .history-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+
+        #historyList { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow-y: auto; }
+
+        #historyList li {
+            display: grid; grid-template-columns: 1fr auto; gap: 2px 12px;
+            padding: 10px 2px; border-top: 1px solid var(--border);
+        }
+
+        #historyList li:first-child { border-top: none; }
+        #historyList .amt { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+        #historyList time { font-size: .8rem; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+        #historyList .bal { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+        #historyList .empty { display: block; color: var(--muted); font-size: .875rem; text-align: center; padding: 14px 0; }
+
+        .tips ul { margin: 0; padding-left: 18px; font-size: .875rem; color: var(--muted); }
+        .tips li { margin-bottom: 6px; }
+
+        /* ---------- Toast ---------- */
+        .toast {
+            position: fixed; left: 50%; top: calc(12px + env(safe-area-inset-top));
+            transform: translate(-50%, -160%);
+            width: min(420px, calc(100% - 32px));
+            background: var(--surface); color: var(--text);
+            border: 1px solid var(--border); border-left: 4px solid var(--accent);
+            border-radius: 14px; padding: 12px 14px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+            font-weight: 600; font-size: .95rem;
+            transition: transform .35s cubic-bezier(.2, .9, .3, 1.2);
+            z-index: 10; pointer-events: none;
+        }
+
+        .toast.show { transform: translate(-50%, 0); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="app">
+        <header class="brand">
+            <div class="logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 5 6 9H3v6h3l5 4V5z" />
+                    <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                    <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+                </svg>
+            </div>
+            <div>
+                <h1>Loa Ting Ting</h1>
+                <p>Giả lập loa báo nhận tiền · số tiền &amp; thời điểm ngẫu nhiên</p>
+            </div>
+        </header>
+
+        <!-- Loa chính -->
+        <section class="card speaker-card" aria-label="Loa">
+            <div class="status">
+                <span class="dot" aria-hidden="true"></span>
+                <span id="statusText">Đang tắt</span>
+                <span id="countdown"></span>
+            </div>
+
+            <button id="powerBtn" class="speaker" aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M11 5 6 9H3v6h3l5 4V5z" />
+                    <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                    <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+                </svg>
+                <span id="powerLabel">Bật loa</span>
+            </button>
+
+            <div>
+                <div class="last-amount" id="lastAmount">+0 đ</div>
+                <div class="last-time" id="lastTime">Chưa có lần nào</div>
+            </div>
+
+            <div class="stats">
+                <div><span class="k">Số dư</span><span class="v" id="balance">0 đ</span></div>
+                <div><span class="k">Hôm nay</span><span class="v" id="todayTotal">0 đ</span></div>
+                <div><span class="k">Số lần</span><span class="v" id="todayCount">0</span></div>
+            </div>
+
+            <button id="testBtn" class="btn wide">🔔 Phát thử ngay</button>
+        </section>
+
+        <div id="voiceWarn" class="warn" hidden></div>
+
+        <!-- Giọng đọc -->
+        <details class="card" id="voicePanel" open>
+            <summary>Cài đặt giọng đọc</summary>
+
+            <label class="field">
+                <span>Giọng đọc</span>
+                <select data-key="voiceURI" id="voiceSelect">
+                    <option value="">Tự động (tiếng Việt)</option>
+                </select>
+                <small class="hint" id="voiceInfo"></small>
+            </label>
+
+            <label class="field">
+                <span class="lbl">Tốc độ <output data-for="rate"></output></span>
+                <input type="range" min="0.5" max="1.6" step="0.05" data-key="rate" id="rateInput">
+            </label>
+            <label class="field">
+                <span class="lbl">Cao độ <output data-for="pitch"></output></span>
+                <input type="range" min="0.5" max="1.5" step="0.05" data-key="pitch" id="pitchInput">
+            </label>
+            <label class="field">
+                <span class="lbl">Âm lượng giọng <output data-for="volume"></output></span>
+                <input type="range" min="0" max="1" step="0.05" data-key="volume" id="volumeInput">
+            </label>
+
+            <label class="field">
+                <span>Cách đọc số</span>
+                <select data-key="dialect" id="dialectSelect">
+                    <option value="bac">Miền Bắc (nghìn, linh)</option>
+                    <option value="nam">Miền Nam (ngàn, lẻ)</option>
+                </select>
+            </label>
+
+            <button class="btn wide" id="sampleBtn" type="button">▶ Nghe thử giọng</button>
+        </details>
+
+        <!-- Cài đặt khác -->
+        <details class="card" id="settingsPanel">
+            <summary>Cài đặt số tiền, thời gian &amp; âm báo</summary>
+
+            <h3>Số tiền</h3>
+            <label class="field">
+                <span>Kiểu số tiền</span>
+                <select data-key="amountMode">
+                    <option value="preset">Chọn ngẫu nhiên từ danh sách</option>
+                    <option value="range">Ngẫu nhiên trong khoảng</option>
+                </select>
+            </label>
+
+            <div id="presetGroup">
+                <label class="field">
+                    <span>Danh sách số tiền</span>
+                    <input type="text" data-key="presets" autocomplete="off" spellcheck="false">
+                </label>
+                <p class="hint">Cách nhau bằng dấu phẩy. Viết tắt được: 50k = 50.000, 1tr = 1.000.000.</p>
+                <div class="chips" id="presetChips"></div>
+            </div>
+
+            <div id="rangeGroup" hidden>
+                <div class="row2">
+                    <label class="field">
+                        <span>Từ (đ)</span>
+                        <input type="text" inputmode="numeric" data-key="minAmount" data-kind="money" autocomplete="off">
+                    </label>
+                    <label class="field">
+                        <span>Đến (đ)</span>
+                        <input type="text" inputmode="numeric" data-key="maxAmount" data-kind="money" autocomplete="off">
+                    </label>
+                </div>
+                <label class="field">
+                    <span>Làm tròn tới</span>
+                    <select data-key="step" data-kind="int">
+                        <option value="1">1 đ (số lẻ)</option>
+                        <option value="1000">1.000 đ</option>
+                        <option value="5000">5.000 đ</option>
+                        <option value="10000">10.000 đ</option>
+                        <option value="50000">50.000 đ</option>
+                        <option value="100000">100.000 đ</option>
+                    </select>
+                </label>
+            </div>
+
+            <h3>Thời gian giữa các lần kêu</h3>
+            <div class="row2">
+                <label class="field">
+                    <span>Ít nhất (giây)</span>
+                    <input type="number" min="1" inputmode="numeric" data-key="minGap">
+                </label>
+                <label class="field">
+                    <span>Nhiều nhất (giây)</span>
+                    <input type="number" min="1" inputmode="numeric" data-key="maxGap">
+                </label>
+            </div>
+            <div class="chips" id="gapChips"></div>
+            <div style="height:12px"></div>
+            <label class="check"><input type="checkbox" data-key="showCountdown"> Hiện đếm ngược tới lần kêu tiếp theo</label>
+
+            <h3>Câu đọc</h3>
+            <label class="field">
+                <span>Mẫu câu</span>
+                <select id="templatePreset"></select>
+            </label>
+            <label class="field">
+                <span>Câu sẽ đọc</span>
+                <input type="text" data-key="template" autocomplete="off">
+            </label>
+            <p class="hint">Dùng <b>{tien}</b> cho số tiền và <b>{sodu}</b> cho số dư.</p>
+            <div style="height:10px"></div>
+            <div class="preview field" id="preview"></div>
+
+            <h3>Âm báo “ting ting”</h3>
+            <label class="check"><input type="checkbox" data-key="chime"> Phát âm báo trước khi đọc</label>
+            <label class="field">
+                <span>Kiểu âm báo</span>
+                <select data-key="chimeStyle">
+                    <option value="tingting">Ting ting (2 tiếng)</option>
+                    <option value="ding">Ding (1 tiếng)</option>
+                    <option value="triple">Ting ting ting (3 tiếng)</option>
+                </select>
+            </label>
+            <label class="field">
+                <span class="lbl">Âm lượng âm báo <output data-for="chimeVolume"></output></span>
+                <input type="range" min="0" max="1" step="0.05" data-key="chimeVolume">
+            </label>
+            <button class="btn" id="chimeBtn" type="button">▶ Nghe thử âm báo</button>
+
+            <h3>Số dư &amp; màn hình</h3>
+            <label class="field">
+                <span>Số dư ban đầu (đ)</span>
+                <input type="text" inputmode="numeric" data-key="startBalance" data-kind="money" autocomplete="off">
+            </label>
+            <div class="actions" style="margin-bottom:14px">
+                <button class="btn" id="resetBalanceBtn" type="button">Đặt lại số dư</button>
+            </div>
+            <label class="check"><input type="checkbox" data-key="wakeLock"> Giữ màn hình luôn sáng khi loa đang bật</label>
+        </details>
+
+        <!-- Lịch sử -->
+        <section class="card">
+            <div class="history-head">
+                <h2>Lịch sử</h2>
+                <button class="link" id="clearHistoryBtn" type="button">Xóa lịch sử</button>
+            </div>
+            <ul id="historyList"></ul>
+        </section>
+
+        <details class="card tips">
+            <summary>Mẹo dùng trên điện thoại</summary>
+            <ul>
+                <li>Bấm <b>Bật loa</b> một lần để trình duyệt cho phép phát âm thanh, sau đó loa tự kêu ngẫu nhiên.</li>
+                <li>Để trang mở trên màn hình. Khi khóa máy hoặc chuyển sang app khác, trình duyệt có thể tạm dừng loa.</li>
+                <li>Giọng có dấu <b>★</b> trong danh sách là giọng tự nhiên, nghe hay hơn. App tự chọn giọng tốt nhất trên máy.</li>
+                <li><b>iPhone:</b> tắt chế độ im lặng (gạt bên hông). Giọng hay hơn: Cài đặt › Trợ năng › Nội dung được đọc › Giọng nói › Tiếng Việt › tải bản <b>Nâng cao</b> của giọng Linh.</li>
+                <li><b>Android:</b> Cài đặt › tìm “Chuyển văn bản thành giọng nói” › chọn công cụ của Google › cài dữ liệu Tiếng Việt và chọn giọng (có nhiều giọng nam/nữ để nghe thử).</li>
+                <li><b>Máy tính:</b> mở bằng <b>Microsoft Edge</b> để có giọng AI rất tự nhiên: HoaiMy (nữ), NamMinh (nam). Cần có mạng.</li>
+                <li>Thêm trang ra màn hình chính (Chia sẻ › Thêm vào MH chính) để mở như một app.</li>
+            </ul>
+        </details>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        (() => {
+            'use strict';
+
+            // ================= Cấu hình mặc định =================
+            const DEFAULTS = {
+                amountMode: 'preset',
+                presets: '10k, 20k, 30k, 50k, 100k, 150k, 200k, 300k, 500k',
+                minAmount: 10000,
+                maxAmount: 2000000,
+                step: 1000,
+                minGap: 20,
+                maxGap: 120,
+                showCountdown: true,
+                template: 'Đã nhận {tien} đồng',
+                dialect: 'bac',
+                voiceURI: '',
+                rate: 1,
+                pitch: 1,
+                volume: 1,
+                chime: true,
+                chimeStyle: 'tingting',
+                chimeVolume: 0.8,
+                startBalance: 0,
+                wakeLock: true,
+            };
+
+            const TEMPLATES = [
+                ['Đã nhận … đồng', 'Đã nhận {tien} đồng'],
+                ['Số dư tài khoản vừa tăng … đồng', 'Số dư tài khoản vừa tăng {tien} đồng'],
+                ['Thanh toán thành công, đã nhận … đồng', 'Thanh toán thành công. Đã nhận {tien} đồng'],
+                ['Bạn vừa nhận được … đồng', 'Bạn vừa nhận được {tien} đồng'],
+                ['Đã nhận … đồng, kèm số dư', 'Đã nhận {tien} đồng. Số dư hiện tại {sodu} đồng'],
+            ];
+
+            const PRESET_LISTS = [
+                ['Tiền lẻ', '5k, 10k, 15k, 20k, 25k, 30k, 50k'],
+                ['Bán hàng', '20k, 50k, 100k, 150k, 200k, 300k, 500k'],
+                ['Số lớn', '500k, 1tr, 2tr, 3tr, 5tr, 10tr'],
+            ];
+
+            const GAP_PRESETS = [
+                ['Dồn dập', 5, 20],
+                ['Vừa phải', 30, 120],
+                ['Thưa', 120, 600],
+                ['Rất thưa', 600, 1800],
+            ];
+
+            const SETTINGS_KEY = 'tingting.settings.v1';
+            const STATE_KEY = 'tingting.state.v1';
+
+            // ================= Lưu trữ (an toàn khi bị chặn) =================
+            const storage = {
+                load(key, fallback) {
+                    try {
+                        const raw = localStorage.getItem(key);
+                        return raw ? JSON.parse(raw) : fallback;
+                    } catch (e) {
+                        return fallback;
+                    }
+                },
+                save(key, value) {
+                    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* bỏ qua */ }
+                },
+            };
+
+            const settings = Object.assign({}, DEFAULTS, storage.load(SETTINGS_KEY, {}));
+            const state = Object.assign(
+                { balance: settings.startBalance, day: '', dayTotal: 0, dayCount: 0, history: [] },
+                storage.load(STATE_KEY, {})
+            );
+            if (!Array.isArray(state.history)) state.history = [];
+
+            const saveSettings = () => storage.save(SETTINGS_KEY, settings);
+            const saveState = () => storage.save(STATE_KEY, state);
+
+            const $ = (id) => document.getElementById(id);
+
+            // ================= Tiền: định dạng & đọc =================
+            const numberFmt = new Intl.NumberFormat('vi-VN');
+            const money = (n) => numberFmt.format(n) + ' đ';
+
+            function parseMoney(str) {
+                const s = String(str).trim().toLowerCase().replace(/\s+/g, '');
+                if (!s) return NaN;
+                const m = s.match(/^([\d.,]+)(k|nghìn|ngàn|tr|triệu|m|tỷ|ty)?$/);
+                if (!m) return NaN;
+                const unit = m[2];
+                if (!unit) return Number(m[1].replace(/[.,]/g, ''));
+                const mult = /^(k|nghìn|ngàn)$/.test(unit) ? 1e3 : /^(tr|triệu|m)$/.test(unit) ? 1e6 : 1e9;
+                return Math.round(parseFloat(m[1].replace(',', '.')) * mult);
+            }
+
+            function parseMoneyList(str) {
+                return String(str)
+                    .split(/[;,\n]+/)
+                    .map(parseMoney)
+                    .filter((n) => Number.isFinite(n) && n > 0);
+            }
+
+            const DIGITS = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+
+            // Đọc một nhóm 3 chữ số. `full` = nhóm không đứng đầu (phải đọc cả "không trăm", "linh").
+            function readTriple(n, full, d) {
+                const h = Math.floor(n / 100), t = Math.floor(n / 10) % 10, u = n % 10;
+                const w = [];
+                if (h > 0 || full) w.push(DIGITS[h], 'trăm');
+                if (t === 0) {
+                    if (u > 0 && (h > 0 || full)) w.push(d.le);
+                    if (u > 0) w.push(DIGITS[u]);
+                } else if (t === 1) {
+                    w.push('mười');
+                    if (u === 5) w.push('lăm');
+                    else if (u > 0) w.push(DIGITS[u]);
+                } else {
+                    w.push(DIGITS[t], 'mươi');
+                    if (u === 1) w.push('mốt');
+                    else if (u === 4) w.push('tư');
+                    else if (u === 5) w.push('lăm');
+                    else if (u > 0) w.push(DIGITS[u]);
+                }
+                return w.join(' ');
+            }
+
+            // Đọc số > 0. `lead` = phần đứng đầu cả số (không cần "không trăm" ở nhóm cao nhất).
+            function readNumber(x, d, lead) {
+                if (x >= 1e9) {
+                    const hi = Math.floor(x / 1e9), lo = x % 1e9;
+                    const head = readNumber(hi, d, lead) + ' tỷ';
+                    return lo ? head + ' ' + readNumber(lo, d, false) : head;
+                }
+                const units = ['', d.nghin, 'triệu'];
+                const groups = [x % 1000, Math.floor(x / 1000) % 1000, Math.floor(x / 1e6)];
+                let top = 2;
+                while (top > 0 && groups[top] === 0) top--;
+                const words = [];
+                for (let i = top; i >= 0; i--) {
+                    if (groups[i] === 0) continue;
+                    words.push(readTriple(groups[i], !lead || i < top, d));
+                    if (units[i]) words.push(units[i]);
+                }
+                return words.join(' ');
+            }
+
+            function numberToVietnamese(num, dialect) {
+                const d = dialect === 'nam' ? { le: 'lẻ', nghin: 'ngàn' } : { le: 'linh', nghin: 'nghìn' };
+                const x = Math.floor(Math.abs(num));
+                return x === 0 ? 'không' : readNumber(x, d, true);
+            }
+
+            function buildText(amount, balance) {
+                const tpl = (settings.template || '').trim() || DEFAULTS.template;
+                return tpl
+                    .replace(/\{tien\}/gi, numberToVietnamese(amount, settings.dialect))
+                    .replace(/\{sodu\}/gi, numberToVietnamese(balance, settings.dialect));
+            }
+
+            function randomAmount() {
+                if (settings.amountMode === 'preset') {
+                    const list = parseMoneyList(settings.presets);
+                    if (list.length) return list[Math.floor(Math.random() * list.length)];
+                }
+                const min = Math.max(1, Number(settings.minAmount) || 1000);
+                const max = Math.max(min, Number(settings.maxAmount) || min);
+                const step = Math.max(1, Number(settings.step) || 1);
+                // Phân bố log: số nhỏ ra thường hơn số lớn, giống thực tế hơn.
+                const raw = Math.exp(Math.log(min) + Math.random() * (Math.log(max) - Math.log(min)));
+                const lo = Math.ceil(min / step) * step;
+                const hi = Math.floor(max / step) * step;
+                if (lo > hi) return Math.round(min);
+                return Math.min(hi, Math.max(lo, Math.round(raw / step) * step));
+            }
+
+            // ================= Giọng đọc =================
+            const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
+            let voices = [];
+            let currentUtterance = null; // giữ tham chiếu để Chrome không thu hồi giữa chừng
+
+            const isVi = (v) => /^vi/i.test(v.lang);
+
+            // Chấm điểm chất lượng giọng: giọng AI (Natural/Neural), bản Nâng cao/Premium của Apple,
+            // giọng online của Google/Microsoft được ưu tiên hơn giọng nén (compact) có sẵn.
+            function voiceScore(v) {
+                const n = `${v.name} ${v.voiceURI}`.toLowerCase();
+                let s = 0;
+                if (/natural|neural|premium/.test(n)) s += 6;
+                if (/enhanced|nâng cao/.test(n)) s += 4;
+                if (/online|network/.test(n)) s += 2;
+                if (/hoaimy|namminh/.test(n)) s += 2;
+                if (/google/.test(n)) s += 1;
+                if (/compact/.test(n)) s -= 2;
+                return s;
+            }
+
+            const isGoodVoice = (v) => voiceScore(v) >= 4;
+
+            // iPhone đặt cùng tên cho bản thường và bản Nâng cao, nên ghi rõ cấp chất lượng.
+            function voiceName(v) {
+                const uri = v.voiceURI.toLowerCase();
+                const tier = uri.includes('premium') ? ' · Cao cấp' : uri.includes('enhanced') ? ' · Nâng cao' : '';
+                return v.name + tier;
+            }
+
+            function autoVoice() {
+                return voices.filter(isVi).sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
+            }
+
+            function pickVoice() {
+                return voices.find((v) => v.voiceURI === settings.voiceURI) || autoVoice();
+            }
+
+            function refreshVoices() {
+                if (!synth) return;
+                voices = synth.getVoices();
+                const sel = $('voiceSelect');
+                sel.textContent = '';
+                sel.appendChild(new Option('Tự động (tiếng Việt)', ''));
+                const addGroup = (label, list) => {
+                    if (!list.length) return;
+                    const g = document.createElement('optgroup');
+                    g.label = label;
+                    list.forEach((v) => g.appendChild(new Option(`${isGoodVoice(v) ? '★ ' : ''}${voiceName(v)} (${v.lang})`, v.voiceURI)));
+                    sel.appendChild(g);
+                };
+                addGroup('Tiếng Việt', voices.filter(isVi).sort((a, b) => voiceScore(b) - voiceScore(a)));
+                addGroup('Ngôn ngữ khác', voices.filter((v) => !isVi(v)));
+                sel.value = settings.voiceURI;
+                if (sel.value !== settings.voiceURI) sel.value = '';
+                updateVoiceWarning();
+                renderVoiceInfo();
+            }
+
+            function renderVoiceInfo() {
+                const el = $('voiceInfo');
+                if (!synth) {
+                    el.textContent = '';
+                    return;
+                }
+                const v = pickVoice();
+                if (!v) {
+                    el.textContent = 'Đang dùng: giọng mặc định của máy.';
+                } else if (isGoodVoice(v)) {
+                    el.textContent = `Đang dùng: ${voiceName(v)} ★ (giọng tự nhiên)`;
+                } else {
+                    el.textContent = `Đang dùng: ${voiceName(v)}. Có thể cài giọng hay hơn, xem “Mẹo dùng trên điện thoại”.`;
+                }
+            }
+
+            function updateVoiceWarning(final) {
+                const box = $('voiceWarn');
+                if (!synth) {
+                    box.innerHTML = '<strong>Trình duyệt không hỗ trợ đọc giọng nói.</strong>Hãy mở bằng Chrome, Safari hoặc Edge bản mới.';
+                    box.hidden = false;
+                    return;
+                }
+                // Chỉ cảnh báo khi danh sách giọng đã tải xong (hoặc đã chờ đủ lâu).
+                if (voices.some(isVi)) {
+                    box.hidden = true;
+                } else if (voices.length || final) {
+                    box.innerHTML = '<strong>Máy chưa có giọng đọc tiếng Việt.</strong>' +
+                        'Loa vẫn kêu “ting ting” nhưng câu đọc có thể sai giọng. Xem phần “Mẹo dùng trên điện thoại” bên dưới để cài giọng Việt.';
+                    box.hidden = false;
+                }
+            }
+
+            function speak(text) {
+                return new Promise((resolve) => {
+                    if (!synth || !text) return resolve();
+                    const u = new SpeechSynthesisUtterance(text);
+                    const v = pickVoice();
+                    if (v) {
+                        u.voice = v;
+                        u.lang = v.lang;
+                    } else {
+                        u.lang = 'vi-VN';
+                    }
+                    u.rate = Number(settings.rate) || 1;
+                    u.pitch = Number(settings.pitch) || 1;
+                    u.volume = Math.min(1, Math.max(0, Number(settings.volume)));
+
+                    let finished = false;
+                    let guard = 0;
+                    const done = () => {
+                        if (finished) return;
+                        finished = true;
+                        clearTimeout(guard);
+                        if (currentUtterance === u) currentUtterance = null;
+                        resolve();
+                    };
+                    // Phòng khi trình duyệt không bắn sự kiện onend.
+                    guard = setTimeout(done, 5000 + (text.length * 160) / u.rate);
+                    u.onend = done;
+                    u.onerror = done;
+
+                    currentUtterance = u;
+                    if (synth.speaking || synth.pending) synth.cancel();
+                    synth.resume();
+                    synth.speak(u);
+                });
+            }
+
+            // ================= Âm báo (Web Audio, không cần file) =================
+            let audioCtx = null;
+
+            function ensureAudio() {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return null;
+                if (!audioCtx) audioCtx = new Ctx();
+                if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => { });
+                return audioCtx;
+            }
+
+            const CHIMES = {
+                tingting: [[0, 1568], [0.17, 2093]],
+                ding: [[0, 1760]],
+                triple: [[0, 1319], [0.15, 1568], [0.3, 2093]],
+            };
+
+            // Tiếng chuông: một nốt chính + vài họa âm tắt dần.
+            function bell(ctx, t, freq, vol) {
+                const out = ctx.createGain();
+                out.gain.value = vol;
+                out.connect(ctx.destination);
+                [[1, 1, 1.2], [2, 0.4, 0.6], [3.01, 0.18, 0.4], [4.17, 0.1, 0.25]].forEach(([ratio, amp, decay]) => {
+                    const osc = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq * ratio;
+                    g.gain.setValueAtTime(0.0001, t);
+                    g.gain.exponentialRampToValueAtTime(amp, t + 0.006);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+                    osc.connect(g);
+                    g.connect(out);
+                    osc.start(t);
+                    osc.stop(t + decay + 0.05);
+                });
+            }
+
+            function playChime() {
+                return new Promise((resolve) => {
+                    const ctx = ensureAudio();
+                    if (!ctx) return resolve();
+                    const notes = CHIMES[settings.chimeStyle] || CHIMES.tingting;
+                    const vol = Math.min(1, Math.max(0, Number(settings.chimeVolume))) * 0.35;
+                    const t0 = ctx.currentTime + 0.03;
+                    notes.forEach(([dt, f]) => bell(ctx, t0 + dt, f, vol));
+                    setTimeout(resolve, (notes[notes.length - 1][0] + 0.6) * 1000);
+                });
+            }
+
+            // Trình duyệt di động chỉ cho phát âm thanh sau một lần chạm của người dùng.
+            let unlocked = false;
+
+            function unlockAudio() {
+                const ctx = ensureAudio();
+                if (unlocked) return;
+                unlocked = true;
+                try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
+                try {
+                    const buf = ctx.createBuffer(1, 1, 22050);
+                    const src = ctx.createBufferSource();
+                    src.buffer = buf;
+                    src.connect(ctx.destination);
+                    src.start(0);
+                } catch (e) { }
+                if (synth) {
+                    try {
+                        const u = new SpeechSynthesisUtterance(' ');
+                        u.volume = 0;
+                        synth.speak(u);
+                    } catch (e) { }
+                }
+            }
+
+            // ================= Giữ màn hình sáng =================
+            let wakeLock = null;
+
+            async function requestWake() {
+                if (!running || !settings.wakeLock || wakeLock || !('wakeLock' in navigator)) return;
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    wakeLock.addEventListener('release', () => { wakeLock = null; });
+                } catch (e) {
+                    wakeLock = null;
+                }
+            }
+
+            function releaseWake() {
+                if (wakeLock) wakeLock.release().catch(() => { });
+                wakeLock = null;
+            }
+
+            // ================= Vòng lặp kêu ngẫu nhiên =================
+            let running = false;
+            let busy = false;
+            let nextAt = 0;
+
+            function planNext() {
+                let a = Math.max(1, Number(settings.minGap) || 1);
+                let b = Math.max(1, Number(settings.maxGap) || a);
+                if (b < a) [a, b] = [b, a];
+                nextAt = Date.now() + (a + Math.random() * (b - a)) * 1000;
+            }
+
+            function dayKey() {
+                const d = new Date();
+                return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+            }
+
+            function rollDay() {
+                const k = dayKey();
+                if (state.day !== k) {
+                    state.day = k;
+                    state.dayTotal = 0;
+                    state.dayCount = 0;
+                }
+            }
+
+            async function fire() {
+                if (busy) return;
+                busy = true;
+                try {
+                    rollDay();
+                    const amount = randomAmount();
+                    state.balance = (Number(state.balance) || 0) + amount;
+                    state.dayTotal += amount;
+                    state.dayCount += 1;
+                    const entry = { t: Date.now(), a: amount, b: state.balance };
+                    state.history.unshift(entry);
+                    if (state.history.length > 100) state.history.length = 100;
+                    saveState();
+
+                    renderStats();
+                    renderHistory();
+                    renderLatest(true);
+                    toast(`🔔 Ting ting! +${money(amount)}`);
+                    document.body.classList.add('ringing');
+
+                    if (settings.chime) await playChime();
+                    await speak(buildText(amount, state.balance));
+                } finally {
+                    busy = false;
+                    document.body.classList.remove('ringing');
+                }
+            }
+
+            function tick() {
+                if (running && !busy && Date.now() >= nextAt) {
+                    fire().finally(planNext);
+                }
+                renderCountdown();
+            }
+
+            function start() {
+                unlockAudio();
+                running = true;
+                planNext();
+                requestWake();
+                renderRunning();
+                toast('Đã bật loa — sẽ tự kêu vào lúc ngẫu nhiên');
+            }
+
+            function stop() {
+                running = false;
+                releaseWake();
+                if (synth) synth.cancel();
+                renderRunning();
+            }
+
+            // ================= Giao diện =================
+            const timeFmt = (t) => {
+                const d = new Date(t);
+                const time = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const sameDay = d.toDateString() === new Date().toDateString();
+                return sameDay ? time : `${time} · ${d.getDate()}/${d.getMonth() + 1}`;
+            };
+
+            function formatDuration(sec) {
+                sec = Math.max(0, Math.ceil(sec));
+                if (sec < 60) return `${sec} giây`;
+                const m = Math.floor(sec / 60), s = sec % 60;
+                return s ? `${m} phút ${s} giây` : `${m} phút`;
+            }
+
+            function renderRunning() {
+                document.body.classList.toggle('running', running);
+                $('powerBtn').setAttribute('aria-pressed', String(running));
+                $('powerLabel').textContent = running ? 'Chạm để tắt' : 'Bật loa';
+                $('statusText').textContent = running ? 'Loa đang bật' : 'Đang tắt';
+                renderCountdown();
+            }
+
+            function renderCountdown() {
+                const el = $('countdown');
+                let text = '';
+                if (busy) text = '· đang đọc…';
+                else if (running) text = settings.showCountdown ? `· lần tới sau ${formatDuration((nextAt - Date.now()) / 1000)}` : '· đang chờ…';
+                if (el.textContent !== text) el.textContent = text;
+            }
+
+            function renderStats() {
+                rollDay();
+                $('balance').textContent = money(Number(state.balance) || 0);
+                $('todayTotal').textContent = money(state.dayTotal);
+                $('todayCount').textContent = String(state.dayCount);
+            }
+
+            function renderLatest(animate) {
+                const last = state.history[0];
+                const amt = $('lastAmount');
+                amt.textContent = last ? `+${money(last.a)}` : '+0 đ';
+                $('lastTime').textContent = last ? `Lúc ${timeFmt(last.t)}` : 'Chưa có lần nào';
+                if (animate) {
+                    amt.classList.remove('pop');
+                    void amt.offsetWidth; // khởi động lại animation
+                    amt.classList.add('pop');
+                }
+            }
+
+            function renderHistory() {
+                const ul = $('historyList');
+                ul.textContent = '';
+                if (!state.history.length) {
+                    const li = document.createElement('li');
+                    li.className = 'empty';
+                    li.textContent = 'Chưa có lần nào. Bấm “Bật loa” hoặc “Phát thử ngay”.';
+                    ul.appendChild(li);
+                    return;
+                }
+                const frag = document.createDocumentFragment();
+                state.history.forEach((h) => {
+                    const li = document.createElement('li');
+                    const amt = document.createElement('span');
+                    amt.className = 'amt';
+                    amt.textContent = `+${money(h.a)}`;
+                    const time = document.createElement('time');
+                    time.dateTime = new Date(h.t).toISOString();
+                    time.textContent = timeFmt(h.t);
+                    const bal = document.createElement('span');
+                    bal.className = 'bal';
+                    bal.textContent = `Số dư ${money(h.b)}`;
+                    li.append(amt, time, bal);
+                    frag.appendChild(li);
+                });
+                ul.appendChild(frag);
+            }
+
+            function renderPreview() {
+                const sample = 150000;
+                const box = $('preview');
+                box.textContent = '';
+                const label = document.createElement('span');
+                label.textContent = 'Ví dụ: ';
+                const b = document.createElement('b');
+                b.textContent = buildText(sample, (Number(state.balance) || 0) + sample);
+                box.append(label, b);
+            }
+
+            function renderOutputs() {
+                document.querySelectorAll('output[data-for]').forEach((o) => {
+                    const v = Number(settings[o.dataset.for]);
+                    o.textContent = o.dataset.for === 'rate' || o.dataset.for === 'pitch' ? `${v.toFixed(2)}×` : `${Math.round(v * 100)}%`;
+                });
+            }
+
+            function syncTemplatePreset() {
+                const sel = $('templatePreset');
+                const match = TEMPLATES.find(([, tpl]) => tpl === settings.template);
+                sel.value = match ? match[1] : '';
+            }
+
+            function renderModes() {
+                const isPreset = settings.amountMode === 'preset';
+                $('presetGroup').hidden = !isPreset;
+                $('rangeGroup').hidden = isPreset;
+            }
+
+            let toastTimer = 0;
+            function toast(msg) {
+                const el = $('toast');
+                el.textContent = msg;
+                el.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+            }
+
+            // ================= Ràng buộc cài đặt <-> form =================
+            function setInputValue(el, key) {
+                if (el.type === 'checkbox') el.checked = !!settings[key];
+                else if (el.dataset.kind === 'money') el.value = numberFmt.format(Number(settings[key]) || 0);
+                else el.value = settings[key];
+            }
+
+            function onSettingChange(key) {
+                saveSettings();
+                if (key === 'amountMode') renderModes();
+                if (key === 'template') syncTemplatePreset();
+                if (key === 'template' || key === 'dialect') renderPreview();
+                if (key === 'voiceURI') renderVoiceInfo();
+                if ((key === 'minGap' || key === 'maxGap') && running && !busy) planNext();
+                if (key === 'wakeLock') settings.wakeLock ? requestWake() : releaseWake();
+                renderOutputs();
+                renderCountdown();
+            }
+
+            function bindSettings() {
+                document.querySelectorAll('[data-key]').forEach((el) => {
+                    const key = el.dataset.key;
+                    const kind = el.dataset.kind;
+                    setInputValue(el, key);
+                    const evt = el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input';
+                    el.addEventListener(evt, () => {
+                        let v;
+                        if (el.type === 'checkbox') v = el.checked;
+                        else if (kind === 'money') v = parseMoney(el.value);
+                        else if (kind === 'int' || el.type === 'number' || el.type === 'range') v = Number(el.value);
+                        else v = el.value;
+                        if (typeof v === 'number' && !Number.isFinite(v)) return;
+                        settings[key] = v;
+                        onSettingChange(key);
+                    });
+                    if (kind === 'money') el.addEventListener('blur', () => setInputValue(el, key));
+                });
+            }
+
+            function setSetting(key, value) {
+                settings[key] = value;
+                document.querySelectorAll(`[data-key="${key}"]`).forEach((el) => setInputValue(el, key));
+                onSettingChange(key);
+            }
+
+            function buildChips() {
+                const presetBox = $('presetChips');
+                PRESET_LISTS.forEach(([label, list]) => {
+                    const b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'chip';
+                    b.textContent = label;
+                    b.addEventListener('click', () => setSetting('presets', list));
+                    presetBox.appendChild(b);
+                });
+
+                const gapBox = $('gapChips');
+                GAP_PRESETS.forEach(([label, a, b]) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'chip';
+                    btn.textContent = `${label} (${formatDuration(a)} – ${formatDuration(b)})`;
+                    btn.addEventListener('click', () => {
+                        setSetting('minGap', a);
+                        setSetting('maxGap', b);
+                    });
+                    gapBox.appendChild(btn);
+                });
+
+                const sel = $('templatePreset');
+                TEMPLATES.forEach(([label, tpl]) => sel.appendChild(new Option(label, tpl)));
+                sel.appendChild(new Option('Tự viết…', ''));
+                sel.addEventListener('change', () => {
+                    if (sel.value) setSetting('template', sel.value);
+                    else document.querySelector('[data-key="template"]').focus();
+                });
+            }
+
+            // ================= Sự kiện =================
+            $('powerBtn').addEventListener('click', () => (running ? stop() : start()));
+
+            $('testBtn').addEventListener('click', () => {
+                unlockAudio();
+                fire();
+            });
+
+            $('sampleBtn').addEventListener('click', () => {
+                unlockAudio();
+                const sample = randomAmount();
+                speak(buildText(sample, (Number(state.balance) || 0) + sample));
+            });
+
+            $('chimeBtn').addEventListener('click', () => {
+                unlockAudio();
+                playChime();
+            });
+
+            $('resetBalanceBtn').addEventListener('click', () => {
+                state.balance = Number(settings.startBalance) || 0;
+                saveState();
+                renderStats();
+                renderPreview();
+                toast(`Số dư đã đặt lại: ${money(state.balance)}`);
+            });
+
+            // Bấm hai lần để xóa (không dùng confirm() vì một số khung nhúng chặn hộp thoại).
+            let clearArmed = 0;
+            $('clearHistoryBtn').addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                if (!state.history.length) return;
+                if (!clearArmed) {
+                    btn.textContent = 'Bấm lần nữa để xóa';
+                    clearArmed = setTimeout(() => {
+                        clearArmed = 0;
+                        btn.textContent = 'Xóa lịch sử';
+                    }, 3000);
+                    return;
+                }
+                clearTimeout(clearArmed);
+                clearArmed = 0;
+                btn.textContent = 'Xóa lịch sử';
+                state.history = [];
+                saveState();
+                renderHistory();
+                renderLatest(false);
+            });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState !== 'visible') return;
+                requestWake();
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => { });
+            });
+
+            // ================= Khởi động =================
+            buildChips();
+            bindSettings();
+            syncTemplatePreset();
+            renderModes();
+            renderOutputs();
+            renderPreview();
+            renderStats();
+            renderLatest(false);
+            renderHistory();
+            renderRunning();
+
+            if (synth) {
+                refreshVoices();
+                if ('onvoiceschanged' in synth) synth.onvoiceschanged = refreshVoices;
+                setTimeout(refreshVoices, 600);
+                setTimeout(() => updateVoiceWarning(true), 2000);
+            } else {
+                updateVoiceWarning(true);
+            }
+
+            setInterval(tick, 250);
+
+            // Cho phép kiểm thử từ console.
+            window.tingting = { numberToVietnamese, parseMoney, randomAmount, buildText };
+        })();
+    </script>
+</body>
+
+</html>

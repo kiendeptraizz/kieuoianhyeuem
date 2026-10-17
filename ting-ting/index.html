@@ -385,9 +385,45 @@
 
         <div id="voiceWarn" class="warn" hidden></div>
 
-        <!-- Cài đặt -->
+        <!-- Giọng đọc -->
+        <details class="card" id="voicePanel" open>
+            <summary>Cài đặt giọng đọc</summary>
+
+            <label class="field">
+                <span>Giọng đọc</span>
+                <select data-key="voiceURI" id="voiceSelect">
+                    <option value="">Tự động (tiếng Việt)</option>
+                </select>
+                <small class="hint" id="voiceInfo"></small>
+            </label>
+
+            <label class="field">
+                <span class="lbl">Tốc độ <output data-for="rate"></output></span>
+                <input type="range" min="0.5" max="1.6" step="0.05" data-key="rate" id="rateInput">
+            </label>
+            <label class="field">
+                <span class="lbl">Cao độ <output data-for="pitch"></output></span>
+                <input type="range" min="0.5" max="1.5" step="0.05" data-key="pitch" id="pitchInput">
+            </label>
+            <label class="field">
+                <span class="lbl">Âm lượng giọng <output data-for="volume"></output></span>
+                <input type="range" min="0" max="1" step="0.05" data-key="volume" id="volumeInput">
+            </label>
+
+            <label class="field">
+                <span>Cách đọc số</span>
+                <select data-key="dialect" id="dialectSelect">
+                    <option value="bac">Miền Bắc (nghìn, linh)</option>
+                    <option value="nam">Miền Nam (ngàn, lẻ)</option>
+                </select>
+            </label>
+
+            <button class="btn wide" id="sampleBtn" type="button">▶ Nghe thử giọng</button>
+        </details>
+
+        <!-- Cài đặt khác -->
         <details class="card" id="settingsPanel">
-            <summary>Cài đặt</summary>
+            <summary>Cài đặt số tiền, thời gian &amp; âm báo</summary>
 
             <h3>Số tiền</h3>
             <label class="field">
@@ -446,7 +482,7 @@
             <div style="height:12px"></div>
             <label class="check"><input type="checkbox" data-key="showCountdown"> Hiện đếm ngược tới lần kêu tiếp theo</label>
 
-            <h3>Câu đọc &amp; giọng</h3>
+            <h3>Câu đọc</h3>
             <label class="field">
                 <span>Mẫu câu</span>
                 <select id="templatePreset"></select>
@@ -458,36 +494,6 @@
             <p class="hint">Dùng <b>{tien}</b> cho số tiền và <b>{sodu}</b> cho số dư.</p>
             <div style="height:10px"></div>
             <div class="preview field" id="preview"></div>
-
-            <label class="field">
-                <span>Cách đọc số</span>
-                <select data-key="dialect">
-                    <option value="bac">Miền Bắc (nghìn, linh)</option>
-                    <option value="nam">Miền Nam (ngàn, lẻ)</option>
-                </select>
-            </label>
-
-            <label class="field">
-                <span>Giọng đọc</span>
-                <select data-key="voiceURI" id="voiceSelect">
-                    <option value="">Tự động (tiếng Việt)</option>
-                </select>
-                <small class="hint" id="voiceInfo"></small>
-            </label>
-
-            <label class="field">
-                <span class="lbl">Tốc độ <output data-for="rate"></output></span>
-                <input type="range" min="0.5" max="1.6" step="0.05" data-key="rate">
-            </label>
-            <label class="field">
-                <span class="lbl">Cao độ <output data-for="pitch"></output></span>
-                <input type="range" min="0.5" max="1.5" step="0.05" data-key="pitch">
-            </label>
-            <label class="field">
-                <span class="lbl">Âm lượng giọng <output data-for="volume"></output></span>
-                <input type="range" min="0" max="1" step="0.05" data-key="volume">
-            </label>
-            <button class="btn" id="sampleBtn" type="button">▶ Nghe thử câu đọc</button>
 
             <h3>Âm báo “ting ting”</h3>
             <label class="check"><input type="checkbox" data-key="chime"> Phát âm báo trước khi đọc</label>
